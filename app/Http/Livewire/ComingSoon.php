@@ -13,14 +13,14 @@ class ComingSoon extends Component
     public function loadComingSoon()
     {
         $afterFourMonths = Carbon::now()->addMonths(4)->timestamp;
-        $this->comingSoon = Cache::remember('coming-soon', 1200, function () use ($afterFourMonths) {
-            return   Http::withHeaders(config('services.igdb.headers'))
+        $this->comingSoon = Cache::remember('coming-soon', 3 , function () use ($afterFourMonths) {
+            return  Http::withHeaders(config('services.igdb.headers'))
             ->withBody(
                 "fields name, first_release_date, cover.url ;
                 where platforms = {6,48,130,49}
                 & first_release_date >= {$afterFourMonths};
                 sort first_release_date asc;
-                limit 3;"
+                limit 4;"
                 ,"text/plain"
             )->post(config('services.igdb.endpoint'))
             ->json();

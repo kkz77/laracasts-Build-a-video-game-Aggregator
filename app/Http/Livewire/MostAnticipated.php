@@ -13,7 +13,7 @@ class MostAnticipated extends Component
     public function loadMostAnticipated()
     {
         $current = Carbon::now()->timestamp;
-        $this->mostAnticipated = Cache::remember('most-anticipated', 1200, function () use($current) {
+        $this->mostAnticipated = Cache::remember('most-anticipated', 3, function () use($current) {
             return  Http::withHeaders(config('services.igdb.headers'))
             ->withBody(
                 "fields name, first_release_date ,rating,cover.url,rating,platforms.abbreviation,total_rating_count,slug,summary,aggregated_rating;
