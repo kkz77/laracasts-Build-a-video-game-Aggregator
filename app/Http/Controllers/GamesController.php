@@ -9,12 +9,11 @@ class GamesController extends Controller
 {
     public function index()
     {
-        $before = Carbon::now()->subMonths(3)->timestamp;
-        $after= Carbon::now()->addMonths(3)->timestamp;
-        $current = Carbon::now()->timestamp;
-        $afterFourMonths = Carbon::now()->addMonths(4)->timestamp;
-        $data= [];
-        $popularGames = Http::withHeaders(config('services.igdb.headers'))
+        // $before = Carbon::now()->subMonths(3)->timestamp;
+        // $after= Carbon::now()->addMonths(3)->timestamp;
+        // $current = Carbon::now()->timestamp;
+        // $afterFourMonths = Carbon::now()->addMonths(4)->timestamp;
+        /* $popularGames = Http::withHeaders(config('services.igdb.headers'))
             ->withBody(
                 "fields name, first_release_date,rating,cover.url,rating,platforms.abbreviation,total_rating_count,slug;
                   where platforms = (6,48,130,49)
@@ -25,9 +24,9 @@ class GamesController extends Controller
                   limit 18;"
                 ,"text/plain"
             )->post(config('services.igdb.endpoint'))
-            ->json();
+            ->json(); */
 
-        $recentlyReviewed = Http::withHeaders(config('services.igdb.headers'))
+        /* $recentlyReviewed = Http::withHeaders(config('services.igdb.headers'))
             ->withBody(
                 "fields name, first_release_date ,rating,cover.url,rating,platforms.abbreviation,total_rating_count,slug,summary;
                   where platforms = (6,48,130,49)
@@ -36,9 +35,9 @@ class GamesController extends Controller
                   & total_rating_count > 5);limit 3;"
                 ,"text/plain"
             )->post(config('services.igdb.endpoint'))
-            ->json();
+            ->json(); */
 
-        $mostAnticipated = Http::withHeaders(config('services.igdb.headers'))
+       /*  $mostAnticipated = Http::withHeaders(config('services.igdb.headers'))
             ->withBody(
                 "fields name, first_release_date ,rating,cover.url,rating,platforms.abbreviation,total_rating_count,slug,summary,aggregated_rating;
                   where platforms = {6,48,130,49}
@@ -48,7 +47,7 @@ class GamesController extends Controller
                   limit 4;"
                 ,"text/plain"
             )->post(config('services.igdb.endpoint'))
-            ->json();
+            ->json(); */
 
            /*  // "fields name, first_release_date ,rating,cover.url,rating,platforms.abbreviation,total_rating_count,slug,summary;
             //   where platforms = {6,48,130,49}
@@ -56,7 +55,7 @@ class GamesController extends Controller
             //   & rating > 5;
             //   sort date asc;
             //   limit 4;" */
-        $comingSoon = Http::withHeaders(config('services.igdb.headers'))
+       /*  $comingSoon = Http::withHeaders(config('services.igdb.headers'))
             ->withBody(
                 "fields name, first_release_date, cover.url ;
                 where platforms = {6,48,130,49}
@@ -65,12 +64,12 @@ class GamesController extends Controller
                 limit 3;"
                 ,"text/plain"
             )->post(config('services.igdb.endpoint'))
-            ->json();
+            ->json(); */
         return view('index',[
-            'popularGames' => $popularGames,
-            'recentlyReviewed' => $recentlyReviewed,
-            'mostAnticipated' => $mostAnticipated,
-            'comingSoon'=> $comingSoon
+            // 'popularGames'=>$popularGames,
+            // 'recentlyReviewed'=>$recentlyReviewed,
+            // 'mostAnticipated' => $mostAnticipated,
+            // 'comingSoon'=> $comingSoon
         ]);
     }
 }
