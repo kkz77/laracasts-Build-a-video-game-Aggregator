@@ -2,28 +2,27 @@
 @forelse ($popularGames as $popularGame)
         <div class="game mt-8 ml-2 lg:ml-0">
             <div class="relative inline-block">
-                <a href="#">
-                    <img src= "{{ Str::replaceFirst('thumb', 'cover_big',  $popularGame['cover']['url'])  }} " alt=""
-                    class="hover:opacity-75 transition duration-150 ease-in-out h-56 w-44">
+                <a href="{{ $popularGame['slug'] }}">
+                    <img src= "{{ $popularGame['coverImageUrl'] }}" alt=""
+                    class="hover:opacity-75 transition duration-150 ease-in-out sm:h-56 sm:w-44">
                 </a>
-                <div class="absolute bottom-0 right-0 w-16 h-16 rounded-full bg-gray-800" style="right:-20px; bottom: -20px">
-                    <div class="font-semibold text-xs flex items-center justify-center h-full">
-                        {{ round($popularGame['rating']).'%' }}
+                @if (isset($popularGame['rating']))
+                    <div class="absolute bottom-0 right-0 w-16 h-16 rounded-full bg-gray-800" style="right:-20px; bottom: -20px">
+                        <div class="font-semibold text-xs flex items-center justify-center h-full">
+                            {{ ($popularGame['rating']) }}
+                        </div>
                     </div>
-                </div>
+                @endif
             </div>
-            <a href="#" class="block font-semibold text-base leading-tight hover:text-gray-400 mt-8">
-                {{ $popularGame["name"] }}
+            <a href="{{ $popularGame['slug'] }}" class="block font-semibold text-base leading-tight hover:text-gray-400 mt-8">
+                {{ $popularGame['name'] }}
             </a>
             <div class="text-gray-400 mt-1">
-                @foreach ($popularGame['platforms'] as $platform)
-                    @if (array_key_exists('abbreviation', $platform))
-                        {{ $platform['abbreviation'] }},
-                    @endif
-                @endforeach
+               {{ $popularGame['platforms'] }}
             </div>
         </div>
     @empty
+    {{-- skeleton loading --}}
     @for ($i = 0; $i < 18; $i++)
         <div class="game mt-8 ml-2 lg:ml-0">
             <div class="relative inline-block">
@@ -37,5 +36,6 @@
             </div>
         </div>
     @endfor
+    {{--end skeleton loading --}}
 @endforelse
 </div>

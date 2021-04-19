@@ -16,7 +16,7 @@
                     <img src="/images/negative-logo.svg" alt="logo" class="w-32 flex-none">
                 </a>
                 <ul class="flex ml-0 lg:ml-16 space-x-8">
-                    <a href="#" class="hover:text-gray-400">Games</a>
+                    <a href="{{ route('game.index') }}" class="hover:text-gray-400">Games</a>
                     <a href="#" class="hover:text-gray-400">Reviews</a>
                     <a href="#" class="hover:text-gray-400">Coming Soon</a>
                 </ul>
