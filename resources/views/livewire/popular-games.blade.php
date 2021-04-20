@@ -7,11 +7,16 @@
                     class="hover:opacity-75 transition duration-150 ease-in-out sm:h-56 sm:w-44">
                 </a>
                 @if (isset($popularGame['rating']))
-                    <div class="absolute bottom-0 right-0 w-16 h-16 rounded-full bg-gray-800" style="right:-20px; bottom: -20px">
-                        <div class="font-semibold text-xs flex items-center justify-center h-full">
-                            {{ ($popularGame['rating']) }}
-                        </div>
-                    </div>
+                <div id="{{ $popularGame['slug'] }}" class="absolute bottom-0 right-0 w-16 h-16 rounded-full bg-gray-800" style="right:-20px; bottom: -20px">
+                    {{-- <div class="font-semibold text-xs flex items-center justify-center h-full">
+                        {{ $similar_game['rating'] }}
+                    </div> --}}
+                 </div>
+                        @include('_rating',[
+                            'slug' => $popularGame['slug'],
+                            'rating' => $popularGame['rating'],
+                            'event' => null,
+                        ])
                 @endif
             </div>
             <a href="{{ $popularGame['slug'] }}" class="block font-semibold text-base leading-tight hover:text-gray-400 mt-8">
@@ -39,3 +44,4 @@
     {{--end skeleton loading --}}
 @endforelse
 </div>
+@stack('scripts')

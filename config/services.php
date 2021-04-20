@@ -36,7 +36,6 @@ return [
             'Authorization' =>  'Bearer '.env('IGDB_ACCESS_TOKEN'),
         ],
         'endpoint'=> 'https://api.igdb.com/v4/games/',
-        'comingpoint' => 'https://api.igdb.com/v4/release_dates/'
     ]
 
 ];

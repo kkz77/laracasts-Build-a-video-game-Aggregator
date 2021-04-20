@@ -5,9 +5,15 @@
                 <a href="{{ $recent['route'] }}">
                     <img src="{{ $recent['cover']  }}" alt="" class="hover:opacity-75 transition duration-150 ease-in-out w-48 ">
                 </a>
-                <div class="absolute bottom-0 right-0 w-16 h-16 rounded-full bg-gray-900 hidden md:block" style="right:-20px; bottom: -20px">
-                    <div class="font-semibold text-xs flex items-center justify-center h-full">{{ $recent['rating'] }}</div>
+                @if ( $recent['rating'] )
+                <div id={{ $recent['slug'] }} class="absolute bottom-0 right-0 w-16 h-16 rounded-full bg-gray-900 hidden md:block" style="right:-20px; bottom: -20px">
                 </div>
+                    @include('_rating',[
+                        'slug' => $recent['slug'],
+                        'rating'=> $recent['rating'],
+                        'event' => null,
+                    ])
+                @endif
             </div>
             <div class="ml-0 md:ml-6 lg:ml-12">
                 <a href="{{ $recent['route'] }}" class="font-semibold text-base leading-tight hover:text-gray-400 mt-4 flex md:flex-none lg:mr-12">
@@ -47,3 +53,4 @@
     {{-- end skeleton loading --}}
     @endforelse
 </div>
+@stack('scripts')

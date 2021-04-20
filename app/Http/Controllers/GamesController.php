@@ -85,8 +85,8 @@ class GamesController extends Controller
         )->post(config('services.igdb.endpoint'))->json();
 
         $game = $this->formatOnView($gameUnformatted);
-        /* dd($game); */
         abort_if(!$game,404);
+       /*  dump($game); */
 
         return view('show',[
            'game'=>$game,
@@ -104,25 +104,23 @@ class GamesController extends Controller
                  return collect($invloved_company['company']['name'])->implode('name',', ');
              })->implode(', '):null,
             'platforms'=> isset($game[0]['platforms'])? collect($game[0]['platforms'])->implode('abbreviation',', '):null,
-            'rating' => (array_key_exists('rating',$game[0]))? round($game[0]['rating']).'%':'0%',
-            'aggregated_rating' => (array_key_exists('aggregated_rating',$game[0]))? round($game[0]['aggregated_rating']).'%':'0%',
+            'rating' => (array_key_exists('rating',$game[0]))? round($game[0]['rating']):'0',
+            'aggregated_rating' => (array_key_exists('aggregated_rating',$game[0]))? round($game[0]['aggregated_rating']):'0',
             'videos' => (isset($game[0]['videos']))?$video= collect($game[0]['videos'])->pluck('video_id')->last():null,
             'screenshots'=> isset($game[0]['screenshots'])? collect($game[0]['screenshots'])->take(9)->map(fn($screenshot)=>Str::replaceFirst('thumb', '1080p', $screenshot['url'])):null,
             /* similar_games slug,cover.url,rating,platform */
             'similar_games' => collect($game[0]['similar_games'])->take(6)->map(fn($game)=> collect($game)->merge([
                 'slug' =>route('game.show',$game['slug']),
                 'cover'=> isset($game['cover'])?Str::replaceFirst('thumb', '1080p', $game['cover']['url']):$game['name'],
-                'rating'=> array_key_exists('rating', $game)? round($game['rating']).'%':'0%',
+                'rating'=> array_key_exists('rating', $game)? round($game['rating']):'0',
                 'abbreviation'=> isset($game['platforms'])? collect($game['platforms'])->implode('abbreviation',', '):'null',
              ])->toArray()),
                 'social'=>[
-                'website'  => collect($game[0]['websites'])->first(),
-             'facebook' => collect($game[0]['websites'])->filter(fn($website)=>Str::contains($website['url'], 'facebook'))->values()->toArray(),
-             'twitter' => collect($game[0]['websites'])->filter(fn($website)=> Str::contains($website['url'], 'twitter'))->values()->toArray(),
-             'instagram' => collect($game[0]['websites'])->filter(fn($website)=> Str::contains($website['url'], 'instagram'))->values()->toArray(),
+                'website'  => isset($game[0]['websites'])?collect($game[0]['websites'])->first():null,
+             'facebook' =>isset($game[0]['websites'])? collect($game[0]['websites'])->filter(fn($website)=>Str::contains($website['url'], 'facebook'))->values()->toArray():null,
+             'twitter' =>isset($game[0]['websites'])? collect($game[0]['websites'])->filter(fn($website)=> Str::contains($website['url'], 'twitter'))->values()->toArray():null,
+             'instagram' =>isset($game[0]['websites'])? collect($game[0]['websites'])->filter(fn($website)=> Str::contains($website['url'], 'instagram'))->values()->toArray():null,
                 ]
-
-
          ]);
          return $temp;
     }

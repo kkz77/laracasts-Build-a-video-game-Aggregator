@@ -19,8 +19,7 @@ class PopularGames extends Component
             return  Http::withHeaders(config('services.igdb.headers'))
             ->withBody(
                 "fields name, first_release_date,rating,cover.url,rating,platforms.abbreviation,total_rating_count,slug;
-                  where platforms = (6,48,130,49)
-                  & (first_release_date >= {$before}
+                  where (first_release_date >= {$before}
                   & first_release_date < {$after}
                   & rating > 7);
                   sort rating desc;
@@ -38,7 +37,7 @@ class PopularGames extends Component
        return collect($games)->map(function ($game){
            return collect($game)->merge([
                 'coverImageUrl' => Str::replaceFirst('thumb', '1080p', $game['cover']['url']),
-                'rating' => isset($game['rating'])? round($game['rating']).'%':null,
+                'rating' => isset($game['rating'])? round($game['rating']):null,
                 'slug' => route('game.show', $game['slug']),
                 'platforms'=> collect($game['platforms'])->implode('abbreviation',', '),
            ]);

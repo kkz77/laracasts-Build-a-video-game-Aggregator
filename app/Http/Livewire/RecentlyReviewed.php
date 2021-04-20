@@ -40,7 +40,7 @@ class RecentlyReviewed extends Component
                'cover'=> Str::replaceFirst('thumb', '1080p', $game['cover']['url']),
                'platforms'=> collect($game['platforms'])->implode('abbreviation',', '),
                'summary'=> isset($game['summary'])? $game['summary']: null,
-               'rating' => isset($game['rating'])? round($game['rating']).'%':'0%',
+               'rating' => isset($game['rating'])? round($game['rating']):'0',
            ]);
         })->toArray();
     }
