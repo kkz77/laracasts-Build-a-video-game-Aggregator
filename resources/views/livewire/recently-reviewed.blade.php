@@ -53,4 +53,3 @@
     {{-- end skeleton loading --}}
     @endforelse
 </div>
-@stack('scripts')

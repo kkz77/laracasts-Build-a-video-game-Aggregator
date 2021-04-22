@@ -36,7 +36,7 @@ class PopularGames extends Component
     {
        return collect($games)->map(function ($game){
            return collect($game)->merge([
-                'coverImageUrl' => Str::replaceFirst('thumb', '1080p', $game['cover']['url']),
+                'coverImageUrl' => array_key_exists('cover',$game)?Str::replaceFirst('thumb', '1080p', $game['cover']['url']):null,
                 'rating' => isset($game['rating'])? round($game['rating']):null,
                 'slug' => route('game.show', $game['slug']),
                 'platforms'=> collect($game['platforms'])->implode('abbreviation',', '),

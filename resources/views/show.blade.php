@@ -3,7 +3,11 @@
     <div class="container mx-auto px-4">
         <div class="game-details border-b border-gray-800 pb-12 flex flex-col lg:flex-row">
             <div class="flex-none">
-                <img src="{{ $game['cover'] }}" alt="rdr" class="w-68 h-72">
+                @if (isset($game['cover']))
+                    <img src="{{ $game['cover'] }}" alt="rdr" class="w-68 h-72">
+                @else
+                    <div class="bg-gray-700 w-68 h-72 flex items-center text-center justify-center text-gray-500">{{ $similar_game['name'] }}</div>
+                @endif
             </div>
             <div class="lg:ml-12 mt-2 lg:mt-0">
                 <h2 class="font-semibold text-4xl">
@@ -82,16 +86,6 @@
                         </div>
                         @endif
 
-                        @if ($game['social']['instagram'])
-                            <div class="h-8 w-8 rounded-full bg-gray-800 flex justify-center items-center">
-                            <a href="{{ $game['social']['instagram'][0]['url'] }}" class="hover:text-gray-400">
-                                <svg class="fill-current w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M352 0H160C71.648 0 0 71.648 0 160v192c0 88.352 71.648 160 160 160h192c88.352 0
-                                     160-71.648 160-160V160C512 71.648 440.352 0 352 0zm112 352c0 61.76-50.24 112-112 112H160c-61.76 0-112-50.24-112-112V160C48 98.24 98.24 48 160 48h192c61.76
-                                     0 112 50.24 112 112v192z"/><path d="M256 128c-70.688 0-128 57.312-128 128s57.312 128 128 128 128-57.312 128-128-57.312-128-128-128zm0 208c-44.096 0-80-35.904-80-80
-                                     0-44.128 35.904-80 80-80s80 35.872 80 80c0 44.096-35.904 80-80 80z"/><circle cx="393.6" cy="118.4" r="17.056"/></svg>
-                            </a>
-                        </div>
-                        @endif
                         <div class="h-8 w-8 rounded-full bg-gray-800 flex justify-center items-center">
                             <a href="#" class="hover:text-gray-400">
                                 <svg class="fill-current w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M512 97.248c-19.04 8.352-39.328 13.888-60.48 16.576 21.76-12.992 38.368-33.408 46.176-58.016-20.288 12.096-42.688 20.64-66.56 25.408C411.872 60.704 384.416 48 354.464 48c-58.112 0-104.896 47.168-104.896 104.992 0 8.32.704 16.32 2.432 23.936-87.264-4.256-164.48-46.08-216.352-109.792-9.056 15.712-14.368 33.696-14.368 53.056 0 36.352 18.72 68.576 46.624 87.232-16.864-.32-33.408-5.216-47.424-12.928v1.152c0 51.008 36.384 93.376 84.096 103.136-8.544 2.336-17.856 3.456-27.52 3.456-6.72 0-13.504-.384-19.872-1.792 13.6 41.568 52.192 72.128 98.08 73.12-35.712 27.936-81.056 44.768-130.144 44.768-8.608 0-16.864-.384-25.12-1.44C46.496 446.88 101.6 464 161.024 464c193.152 0 298.752-160 298.752-298.688 0-4.64-.16-9.12-.384-13.568 20.832-14.784 38.336-33.248 52.608-54.496z"/></svg>
@@ -101,29 +95,84 @@
                     <div class="mt-12">
                         <p>{{ $game['summary'] }}</p>
                     </div>
-                    <div class="mt-6">
-                        {{-- <button class="flex bg-blue-500 text-white font-semibold rounded px-4 py-4 hover:bg-blue-600 transition duration-150 ease-in-out">
+                    <div class="mt-6" x-data="{ isTrailerModalVisible:false }">
+                        <button class="flex bg-blue-500 text-white font-semibold rounded px-4 py-4 hover:bg-blue-600 transition duration-150 ease-in-out"
+                                @click=" isTrailerModalVisible = true"
+                        >
                             <svg class="w-6 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 494.148 494.148"><path d="M405.284 201.188L130.804 13.28C118.128 4.596 105.356 0 94.74 0 74.216 0 61.52 16.472 61.52 44.044v406.124c0 27.54 12.68 43.98 33.156 43.98 10.632 0 23.2-4.6 35.904-13.308l274.608-187.904c17.66-12.104 27.44-28.392 27.44-45.884.004-17.48-9.664-33.764-27.344-45.864z"/></svg>
                             <span class="ml-2">Play Trailer</span>
-                        </button> --}}
-                        <a href="https://youtube.com/watch/{{ $game['videos']  }} " target="_blank" class="flex bg-blue-500 text-white font-semibold rounded px-4 py-4 hover:bg-blue-600 transition duration-150 ease-in-out">
+                        </button>
+                        {{-- <a href="https://youtube.com/watch/{{ $game['videos']  }} " target="_blank" class="flex bg-blue-500 text-white font-semibold rounded px-4 py-4 hover:bg-blue-600 transition duration-150 ease-in-out">
                             <svg class="w-6 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 494.148 494.148"><path d="M405.284 201.188L130.804 13.28C118.128 4.596 105.356 0 94.74 0 74.216 0 61.52 16.472 61.52 44.044v406.124c0 27.54 12.68 43.98 33.156 43.98 10.632 0 23.2-4.6 35.904-13.308l274.608-187.904c17.66-12.104 27.44-28.392 27.44-45.884.004-17.48-9.664-33.764-27.344-45.864z"/></svg>
                             <span class="ml-2">Play Trailer</span>
-                        </a>
+                        </a> --}}
+                        <template x-if = "isTrailerModalVisible">
+                            <div
+                                style="background-color: rgba(0, 0, 0, .5);"
+                                class="fixed top-0 left-0 w-full h-full flex items-center shadow-lg overflow-y-auto"
+                                >
+                                <div class="container mx-auto lg:px-32 rounded-lg overflow-y-auto">
+                                    <div class="bg-gray-900 rounded">
+                                        <div class="flex justify-end pr-4 pt-2">
+                                            <button
+                                                class="text-3xl leading-none hover:text-gray-300"
+                                                @click = " isTrailerModalVisible = false "
+                                                @keydown.escape.window = "isTrailerModalVisible = false "
+                                            >&times;</button>
+                                        </div>
+                                        <div class="modal-body px-8 py-8">
+                                            <div class="responsive-container overflow-hidden  relative" style="padding-top:56.25%">
+                                                <iframe width="568" height="315" class="responsive-iframe absolute top-0 left-0 w-full h-full"
+                                                        src="{{ $game['videos'] }}"
+                                                        style="border:0;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
                     </div>
                 </div>
             </div>
         </div>
         <!-- end game details -->
-        <div class="images-container border-b border-gray-800 pb-12 mt-8">
+        <div class="images-container border-b border-gray-800 pb-12 mt-8" x-data =" { isImageModalVisible: false,image:'' } ">
             <h2 class="text-blue-500 tracking-wide font-semibold uppercase">
                 Images
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-8">
                 @foreach ($game['screenshots'] as $screenshot)
-                   <img src="{{ $screenshot }}" alt="" class="h-56">
+                    <a href="#"
+                        @click.prevent = "
+                            isImageModalVisible= true
+                            image = '{{ $screenshot }}'
+                        "
+                    >
+                        <img src="{{ $screenshot }}" alt="{{ $game['name'] }}" class="h-56 hover:opacity-75 transition ease-in-out duration-150">
+                    </a>
                 @endforeach
             </div>
+            <template x-if = "isImageModalVisible">
+                <div
+                    style="background-color: rgba(0, 0, 0, .5);"
+                    class="fixed top-0 left-0 w-full h-full flex items-center shadow-lg overflow-y-auto"
+                    >
+                    <div class="container mx-auto lg:px-32 rounded-lg overflow-y-auto">
+                        <div class="bg-gray-900 rounded">
+                            <div class="flex justify-end pr-4 pt-2">
+                                <button
+                                    class="text-3xl leading-none hover:text-gray-300"
+                                    @click = " isImageModalVisible = false "
+                                    @keydown.escape.window = "isImageModalVisible = false "
+                                >&times;</button>
+                            </div>
+                            <div class="modal-body px-8 py-8">
+                                <img :src="image" alt="{{ $game['name'] }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
         </div>
         <!-- end image container-->
         <!-- similar games container-->
@@ -139,21 +188,25 @@
                                 <a href="{{ $similar_game['slug'] }}">
                                     <img src="{{ $similar_game['cover'] }}" alt="" class="hover:opacity-75 transition duration-150 ease-in-out ">
                                 </a>
-                            <div id="{{ $similar_game['slug'] }}" class="absolute bottom-0 right-0 w-16 h-16 rounded-full bg-gray-800" style="right:-20px; bottom: -20px">
-                                    {{-- <div class="font-semibold text-xs flex items-center justify-center h-full">
-                                        {{ $similar_game['rating'] }}
-                                    </div> --}}
-                            </div>
-                            @push('scripts')
-                                @include('_rating',[
-                                    'slug' => $similar_game['slug'],
-                                    'rating' => $similar_game['rating'],
-                                    'event' => null,
-                                ])
-                            @endpush
+                            @if ($similar_game['rating']!= 0)
+                                <div id="{{ $similar_game['slug'] }}" class="absolute bottom-0 right-0 w-16 h-16 rounded-full bg-gray-800" style="right:-20px; bottom: -20px">
+                                        {{-- <div class="font-semibold text-xs flex items-center justify-center h-full">
+                                            {{ $similar_game['rating'] }}
+                                        </div> --}}
+                                </div>
+                                @push('scripts')
+                                    @include('_rating',[
+                                        'slug' => $similar_game['slug'],
+                                        'rating' => $similar_game['rating'],
+                                        'event' => null,
+                                    ])
+                                @endpush
+                            @endif
                         </div>
                         @else
-                        <div class="bg-gray-700 w-44 h-56 flex items-center text-center justify-center text-gray-500">{{ $similar_game['name'] }}</div>
+                        <a href="{{ $similar_game['slug'] }}">
+                            <div class="bg-gray-700 w-44 h-56 flex items-center text-center justify-center text-gray-500 hover:opacity-75 transition duration-150 ease-in-out">{{ $similar_game['name'] }}</div>
+                        </a>
                         @endif
                         <a href="{{ $similar_game['slug'] }}" class="block font-semibold text-base leading-tight hover:text-gray-400 mt-8">
                             {{ $similar_game['name'] }}
@@ -167,3 +220,4 @@
         <!-- end similar games -->
     </div>
 @endsection
+

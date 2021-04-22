@@ -3,8 +3,11 @@
         <div class="game mt-8 ml-2 lg:ml-0">
             <div class="relative inline-block">
                 <a href="{{ $popularGame['slug'] }}">
-                    <img src= "{{ $popularGame['coverImageUrl'] }}" alt=""
-                    class="hover:opacity-75 transition duration-150 ease-in-out sm:h-56 sm:w-44">
+                    @if($popularGame['coverImageUrl'])
+                        <img src= "{{ $popularGame['coverImageUrl'] }}" alt="" class="hover:opacity-75 transition duration-150 ease-in-out sm:h-56 sm:w-44">
+                    @else
+                        <div class="bg-gray-700 w-44 h-56 flex items-center text-center justify-center text-gray-500">{{ $similar_game['name'] }}</div>
+                    @endif
                 </a>
                 @if (isset($popularGame['rating']))
                 <div id="{{ $popularGame['slug'] }}" class="absolute bottom-0 right-0 w-16 h-16 rounded-full bg-gray-800" style="right:-20px; bottom: -20px">
@@ -44,4 +47,6 @@
     {{--end skeleton loading --}}
 @endforelse
 </div>
-@stack('scripts')
+
+
+
